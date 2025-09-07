@@ -1,0 +1,109 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+/.nyc_output
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# Next.js
+/.next/
+/out/
+/build
+.next
+next-env.d.ts
+
+# Production
+/dist
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
+
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+
+# PWA files
+**/public/sw.js
+**/public/workbox-*.js
+**/public/worker-*.js
+**/public/sw.js.map
+**/public/workbox-*.js.map
+**/public/worker-*.js.map
+
+# Storybook
+storybook-static/
+.storybook/
+
+# Bundle analyzer
+.webpack-stats.json
+.bundle-stats.json
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# npm
+package-lock.json
+
+# pnpm
+pnpm-lock.yaml
+
+# Optional stylelint cache
+.stylelintcache
+
+# Sentry
+.sentryclirc
+
+# Sitemap
+public/sitemap*.xml
+public/robots.txt
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor directories and files
+.idea
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Local History
+.history/
+
+# Temporary files
+*.tmp
+*.temp
+.temp/
