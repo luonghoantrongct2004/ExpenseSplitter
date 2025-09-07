@@ -21,7 +21,6 @@ Expense Splitter là ứng dụng web giúp quản lý và chia sẻ chi phí tr
 - ✅ Lịch sử chi tiêu
 
 ### **Advanced Features**
-- 📱 PWA - Cài đặt như app mobile
 - 📸 Scan bill (OCR) 
 - 💳 QR Payment (VietQR)
 - 📊 Thống kê chi tiêu
