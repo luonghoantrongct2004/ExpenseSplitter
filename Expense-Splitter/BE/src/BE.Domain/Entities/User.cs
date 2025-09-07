@@ -17,5 +17,6 @@
         public virtual ICollection<Settlement> SettlementsTo { get; set; } = new List<Settlement>();
         public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
         public virtual UserPreference? UserPreference { get; set; }
+        public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 }

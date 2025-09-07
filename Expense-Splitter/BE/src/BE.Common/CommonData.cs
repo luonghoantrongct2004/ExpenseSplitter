@@ -19,8 +19,6 @@ public static class CommonData
         Cancelled
     }
 
-
-
     public enum ActivityAction
     {
         Create,
