@@ -1,6 +1,5 @@
 ﻿using BE.API.Extensions;
 using BE.Application.DTOs;
-using BE.Domain.Exceptions;
 using BE.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

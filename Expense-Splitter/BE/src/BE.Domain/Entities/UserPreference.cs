@@ -10,7 +10,6 @@ namespace BE.Domain.Entities
         public string Timezone { get; set; } = "Asia/Ho_Chi_Minh";
         public string Theme { get; set; } = "light"; // light, dark, auto
 
-        
         public bool EmailNotifications { get; set; } = true;
 
         public bool PushNotifications { get; set; } = true;
