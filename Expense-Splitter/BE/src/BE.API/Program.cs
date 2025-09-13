@@ -17,9 +17,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll", policy =>
     {
         policy.WithOrigins(
-                "http://localhost:3000",      // Next.js dev server
-                "http://localhost:3001",      // Alternative port
-                "https://localhost:3000"      // If using HTTPS
+                "http://localhost:3000"
             )
             .AllowAnyMethod()
             .AllowAnyHeader()

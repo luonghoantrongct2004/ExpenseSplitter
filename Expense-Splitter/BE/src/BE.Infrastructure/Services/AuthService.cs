@@ -43,7 +43,7 @@ namespace BE.Infrastructure.Services
             try
             {
                 // 1. Validate Google token
-                var googleUser = await _googleAuthService.ValidateGoogleTokenAsync(dto.IdToken);
+                var googleUser = await _googleAuthService.ValidateGoogleTokenAsync(dto.Token);
                 if (googleUser == null)
                 {
                     throw new UnauthorizedException("Token của Google sai rồi bro!");
