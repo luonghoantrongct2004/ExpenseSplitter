@@ -5,7 +5,7 @@ WORKDIR /src
 # Copy all
 COPY . .
 
-# Build and publish
+# Build and publish - path src/
 RUN dotnet publish "src/BE.API/BE.API.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
