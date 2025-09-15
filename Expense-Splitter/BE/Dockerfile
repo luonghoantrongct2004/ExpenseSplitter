@@ -1,19 +1,20 @@
 # Expense-Splitter/BE/Dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 # Copy solution file
 COPY ["BE.sln", "."]
 
-# Copy all project files
+# Copy all project files - UPDATED với BE.Common
 COPY ["src/BE.API/BE.API.csproj", "src/BE.API/"]
 COPY ["src/BE.Application/BE.Application.csproj", "src/BE.Application/"]
+COPY ["src/BE.Common/BE.Common.csproj", "src/BE.Common/"]
 COPY ["src/BE.Domain/BE.Domain.csproj", "src/BE.Domain/"]
 COPY ["src/BE.Infrastructure/BE.Infrastructure.csproj", "src/BE.Infrastructure/"]
 
