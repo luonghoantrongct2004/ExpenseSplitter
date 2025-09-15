@@ -1,45 +1,20 @@
 # Expense-Splitter/BE/Dockerfile
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Release
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy solution file
-COPY ["BE.sln", "."]
-
-# Copy all project files - UPDATED với BE.Common
-COPY ["src/BE.API/BE.API.csproj", "src/BE.API/"]
-COPY ["src/BE.Application/BE.Application.csproj", "src/BE.Application/"]
-COPY ["src/BE.Common/BE.Common.csproj", "src/BE.Common/"]
-COPY ["src/BE.Domain/BE.Domain.csproj", "src/BE.Domain/"]
-COPY ["src/BE.Infrastructure/BE.Infrastructure.csproj", "src/BE.Infrastructure/"]
-
-# Restore
-RUN dotnet restore "src/BE.API/BE.API.csproj"
-
-# Copy everything else
+# Copy all
 COPY . .
 
-# Build
-WORKDIR "/src/src/BE.API"
-RUN dotnet build "BE.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+# Build and publish
+RUN dotnet publish "src/BE.API/BE.API.csproj" -c Release -o /app/publish
 
-# Publish
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "BE.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-# Final stage
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 
-# Create non-root user
+# Run as non-root
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
 
+EXPOSE 80
 ENTRYPOINT ["dotnet", "BE.API.dll"]
