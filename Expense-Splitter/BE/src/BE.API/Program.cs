@@ -20,7 +20,10 @@ if (app.Environment.IsDevelopment())
     /// </summary>
     app.UseSwaggerDocumentation();
 }
-
+if (app.Environment.IsProduction())
+{
+    app.UseMiddleware<SwaggerAuthMiddleware>();
+}
 app.UseHttpsRedirection();
 /// <summary>
 /// CORS configuration
