@@ -1,11 +1,11 @@
 # Expense-Splitter/BE/Dockerfile
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-WORKDIR /src
+WORKDIR /app
 
-# Copy all
+# Copy everything from BE folder
 COPY . .
 
-# Build and publish - path src/
+# Build từ đúng path
 RUN dotnet publish "src/BE.API/BE.API.csproj" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
