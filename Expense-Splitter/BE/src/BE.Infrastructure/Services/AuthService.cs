@@ -1,9 +1,11 @@
-﻿using BE.Application.DTOs;
+﻿using AutoMapper;
+using BE.Application.DTOs;
 using BE.Domain.Entities;
 using BE.Domain.Interfaces;
 using BE.Domain.Specifications;
 using BE.Infrastructure.Interfaces;
 using Microsoft.Azure.ServiceBus;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using static BE.Common.CommonData;
 using static BE.Domain.Specifications.UserByGoogleIdSpec;
@@ -19,15 +21,16 @@ namespace BE.Infrastructure.Services
         private readonly IGoogleAuthService _googleAuthService;
         private readonly IJwtService _jwtService;
         private readonly ILogger<AuthService> _logger;
+        private readonly IHostEnvironment _hostEnvironment;
+        private readonly IMapper _mapper;
 
-        public AuthService(
-            IRepository<User> userRepository,
-            IRepository<UserPreference> userPreferenceRepository,
-            IRepository<ActivityLog> activityLogRepository,
-            IRepository<RefreshToken> refreshTokenRepository,
-            IGoogleAuthService googleAuthService,
-            IJwtService jwtService,
-            ILogger<AuthService> logger)
+        public AuthService(IRepository<User> userRepository, 
+            IRepository<UserPreference> userPreferenceRepository, 
+            IRepository<ActivityLog> activityLogRepository, 
+            IRepository<RefreshToken> refreshTokenRepository, 
+            IGoogleAuthService googleAuthService, 
+            IJwtService jwtService, ILogger<AuthService> logger, 
+            IHostEnvironment hostEnvironment, IMapper mapper)
         {
             _userRepository = userRepository;
             _userPreferenceRepository = userPreferenceRepository;
@@ -36,6 +39,61 @@ namespace BE.Infrastructure.Services
             _googleAuthService = googleAuthService;
             _jwtService = jwtService;
             _logger = logger;
+            _hostEnvironment = hostEnvironment;
+            _mapper = mapper;
+        }
+
+        public async Task<AuthResponseDto> DevLoginAsync(string email)
+        {
+            // Chỉ cho phép trong Development
+            if (!_hostEnvironment.IsDevelopment())
+                throw new UnauthorizedException("Dev login not allowed in production");
+
+            // Tìm hoặc tạo user test
+            var user = await _userRepository.FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user == null)
+            {
+                user = new User
+                {
+                    Id = Guid.NewGuid(),
+                    Email = email,
+                    Name = "Dev User",
+                    GoogleId = $"dev_{Guid.NewGuid()}",
+                    AvatarUrl = "https://ui-avatars.com/api/?name=Dev+User",
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
+
+                await _userRepository.AddAsync(user);
+            }
+
+            // Generate tokens
+            var accessToken = _jwtService.GenerateAccessToken(user);
+            var refreshToken = _jwtService.GenerateRefreshToken();
+
+            // Save refresh token
+            var refreshTokenEntity = new RefreshToken
+            {
+                Id = Guid.NewGuid(),
+                UserId = user.Id,
+                Token = refreshToken,
+                ExpiresAt = DateTime.UtcNow.AddDays(7),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            await _refreshTokenRepository.AddAsync(refreshTokenEntity);
+
+            return new AuthResponseDto
+            {
+                User = _mapper.Map<UserDto>(user),
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                AccessTokenExpiresAt = DateTime.UtcNow.AddHours(1),
+                RefreshTokenExpiresAt = refreshTokenEntity.ExpiresAt
+            };
         }
 
         public async Task<AuthResponseDto> GoogleLoginAsync(GoogleLoginDto dto)
@@ -103,7 +161,7 @@ namespace BE.Infrastructure.Services
                 // 4. Generate tokens
                 var accessToken = _jwtService.GenerateAccessToken(user);
                 var refreshToken = _jwtService.GenerateRefreshToken();
-                var accessTokenExpiry = DateTime.UtcNow.AddMinutes(15);
+                var accessTokenExpiry = DateTime.UtcNow.AddDays(1);
                 var refreshTokenExpiry = DateTime.UtcNow.AddDays(30);
 
                 // 5. Save refresh token

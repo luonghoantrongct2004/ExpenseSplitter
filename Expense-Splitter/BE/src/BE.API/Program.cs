@@ -1,96 +1,53 @@
 ﻿using BE.API.Extensions;
 using BE.API.Middleware;
-using BE.Domain;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+/// <summary>
+/// Đăng ký tất cả services cần thiết cho application
+/// Click vào icon này link: ServiceExtensions.cs#AddApplicationServices
+/// </summary>
 
-builder.Services.AddAuthenticationServices(builder.Configuration);
-
-builder.Services.AddControllers();
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.WithOrigins(
-                "http://localhost:3000"
-            )
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials();
-    });
-});
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new()
-    {
-        Title = "Expense Splitter API",
-        Version = "v1",
-        Description = "API cho Expense Splitter nha"
-    });
-
-    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    {
-        Description = "Có dùng JWT nên dùng Bearer {token} nhé bro",
-        Name = "Xác thực đi bro",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-
-    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-    {
-        {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
-
-builder.Services.AddLogging(logging =>
-{
-    logging.ClearProviders();
-    logging.AddConsole();
-    logging.AddDebug();
-});
+builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Expense Splitter API v1");
-        c.RoutePrefix = "swagger"; // Access at http://localhost:5000/swagger
-    });
+    /// <summary>
+    /// Cấu hình Swagger UI cho development
+    /// link: SwaggerExtensions.cs#UseSwaggerDocumentation
+    /// </summary>
+    app.UseSwaggerDocumentation();
 }
 
 app.UseHttpsRedirection();
-
-app.UseCors("AllowAll");
-
-app.UseMiddleware<GlobalErrorHandlingMiddleware>();
-
+/// <summary>
+/// CORS configuration
+/// link: CorsExtensions.cs#AddCorsConfiguration
+/// Policy: AllowSpecificOrigins
+/// </summary>
+app.UseCors("AllowSpecificOrigins");
+/// <summary>
+/// Custom middleware pipeline
+/// link: MiddlewareExtensions.cs#UseCustomMiddleware
+/// Includes: GlobalErrorHandlingMiddleware
+/// </summary>
+app.UseCustomMiddleware();
+/// <summary>
+/// Authentication & Authorization middleware
+/// link: ServiceExtensions.cs#AddAuthenticationConfiguration
+/// </summary>
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
-app.MapGet("/", () => "Expense Splitter API is running!");
-app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
+app.MapGet("/", () => "Chia Tiền Nhóm API đang chạy! 🚀");
+app.MapGet("/health", () => Results.Ok(new
+{
+    status = "Khỏe re! 💪",
+    timestamp = DateTime.UtcNow,
+    environment = app.Environment.EnvironmentName
+}));
 
 app.Run();

@@ -26,7 +26,7 @@ namespace BE.Infrastructure.Services
             _issuer = _configuration["Jwt:Issuer"] ?? "expense-splitter-api";
             _audience = _configuration["Jwt:Audience"] ?? "expense-splitter-app";
             _expiryDays = int.Parse(_configuration["Jwt:ExpiryDays"] ?? "7");
-            _accessTokenExpiryMinutes = int.Parse(_configuration["Jwt:AccessTokenExpiryMinutes"] ?? "15");
+            _accessTokenExpiryMinutes = int.Parse(_configuration["Jwt:AccessTokenExpiryMinutes"] ?? "60");
             _refreshTokenExpiryDays = int.Parse(_configuration["Jwt:RefreshTokenExpiryDays"] ?? "30");
         }
 
