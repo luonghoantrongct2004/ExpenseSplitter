@@ -1,0 +1,62 @@
+# .github/workflows/deploy-backend.yml
+name: Deploy Backend to Render
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'BE/**'
+      - '.github/workflows/deploy-backend.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'BE/**'
+  workflow_dispatch: # Cho phép chạy manual
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+    
+    - name: 🔧 Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: 📦 Restore dependencies
+      working-directory: ./BE
+      run: dotnet restore
+    
+    - name: 🏗️ Build
+      working-directory: ./BE
+      run: dotnet build --no-restore --configuration Release
+    
+    - name: 🧪 Run tests
+      working-directory: ./BE
+      run: dotnet test --no-build --configuration Release --verbosity normal --logger "console;verbosity=detailed"
+
+  deploy:
+    name: Deploy to Render
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+    
+    - name: 🚀 Deploy to Render
+      env:
+        deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      run: |
+        curl -X POST "$deploy_url"
+        echo "✅ Deployment triggered successfully!"
