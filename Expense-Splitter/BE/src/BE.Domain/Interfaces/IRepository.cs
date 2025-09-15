@@ -19,13 +19,19 @@ public interface IRepository<T> where T : BaseEntity
 
     // Specification pattern methods
     Task<T?> FirstOrDefaultAsync(ISpecification<T> spec);
+
     Task<IEnumerable<T>> ListAsync(ISpecification<T> spec);
+
     Task<int> CountAsync(ISpecification<T> spec);
+
     Task<bool> AnyAsync(ISpecification<T> spec);
 
     // Additional useful methods
     Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
+
     Task UpdateRangeAsync(IEnumerable<T> entities);
+
     Task DeleteRangeAsync(IEnumerable<T> entities);
+
     Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate);
 }

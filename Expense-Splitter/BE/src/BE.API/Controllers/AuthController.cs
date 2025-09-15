@@ -1,10 +1,10 @@
 ﻿using BE.API.Extensions;
 using BE.Application.DTOs;
-using BE.Domain.Exceptions;
 using BE.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.ServiceBus;
+using Microsoft.Extensions.Hosting;
 
 namespace BE.API.Controllers
 {
@@ -13,10 +13,41 @@ namespace BE.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IHostEnvironment _hostEnvironment;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IHostEnvironment hostEnvironment)
         {
             _authService = authService;
+            _hostEnvironment = hostEnvironment;
+        }
+
+        /// <summary>
+        /// [DEV ONLY] Lấy token test để dev không cần Google OAuth
+        /// </summary>
+        [HttpPost("dev-login")]
+        [ApiExplorerSettings(IgnoreApi = false)] 
+        public async Task<IActionResult> DevLogin([FromBody] DevLoginDto dto)
+        {
+            // Chỉ cho phép trong môi trường Development
+            if (!_hostEnvironment.IsDevelopment())
+                return NotFound(new { message = "Endpoint này chỉ dùng trong development thôi nhé! 🚫" });
+
+            try
+            {
+                var user = await _authService.DevLoginAsync(dto.Email);
+
+                return Ok(new
+                {
+                    user = user.User,
+                    accessToken = user.AccessToken,
+                    expiresAt = user.AccessTokenExpiresAt,
+                    message = "Dev login thành công! 🎉 (NHỚ XÓA KHI DEPLOY NHÉ!)"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         /// <summary>

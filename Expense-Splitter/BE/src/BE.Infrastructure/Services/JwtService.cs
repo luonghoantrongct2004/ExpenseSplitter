@@ -26,7 +26,7 @@ namespace BE.Infrastructure.Services
             _issuer = _configuration["Jwt:Issuer"] ?? "expense-splitter-api";
             _audience = _configuration["Jwt:Audience"] ?? "expense-splitter-app";
             _expiryDays = int.Parse(_configuration["Jwt:ExpiryDays"] ?? "7");
-            _accessTokenExpiryMinutes = int.Parse(_configuration["Jwt:AccessTokenExpiryMinutes"] ?? "15");
+            _accessTokenExpiryMinutes = int.Parse(_configuration["Jwt:AccessTokenExpiryMinutes"] ?? "60");
             _refreshTokenExpiryDays = int.Parse(_configuration["Jwt:RefreshTokenExpiryDays"] ?? "30");
         }
 
@@ -68,6 +68,7 @@ namespace BE.Infrastructure.Services
             rng.GetBytes(randomNumber);
             return Convert.ToBase64String(randomNumber);
         }
+
         public string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

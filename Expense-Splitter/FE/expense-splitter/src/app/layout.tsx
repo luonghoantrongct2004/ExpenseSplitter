@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
 import { Providers } from "../components/providers";
 import { Header } from "../components/layouts/header";
 import { Navbar } from "../components/layouts/navbar";

@@ -4,7 +4,7 @@
     {
         public string Name { get; set; }
         public string? Description { get; set; }
-        public string Currency { get; set; } = "VND";
+        public string Currency { get; set; } = Common.CommonData.Currency.VND;
         public string InviteCode { get; set; }
         public bool IsActive { get; set; } = true;
         public Guid CreatedById { get; set; }

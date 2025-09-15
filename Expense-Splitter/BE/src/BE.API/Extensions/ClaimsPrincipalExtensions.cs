@@ -11,7 +11,7 @@ namespace BE.API.Extensions
 
             if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
             {
-                throw new UnauthorizedException("User ID not found in token");
+                throw new UnauthorizedException("Không thấy thông tin userid trong token rùi!");
             }
 
             return userId;
