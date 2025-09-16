@@ -12,14 +12,14 @@ builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    /// <summary>
-    /// Cấu hình Swagger UI cho development
-    /// link: SwaggerExtensions.cs#UseSwaggerDocumentation
-    /// </summary>
-    app.UseSwaggerDocumentation();
-}
+// if (app.Environment.IsDevelopment())
+// {
+//     /// <summary>
+//     /// Cấu hình Swagger UI cho development
+//     /// link: SwaggerExtensions.cs#UseSwaggerDocumentation
+//     /// </summary>
+//     app.UseSwaggerDocumentation();
+// }
 if (app.Environment.IsProduction())
 {
     app.UseMiddleware<SwaggerAuthMiddleware>();
