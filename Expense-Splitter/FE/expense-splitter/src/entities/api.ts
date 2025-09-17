@@ -1,4 +1,4 @@
-import { User } from ".";
+import { User } from "./model";
 
 export interface ApiResponse<T = unknown> {
   success: boolean;

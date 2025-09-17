@@ -1,3 +1,5 @@
+import { Group } from "./model";
+
 // types/api.types.ts
 export interface User {
   id: string;
@@ -55,53 +57,27 @@ export interface RefreshTokenDto {
 }
 
 // Group DTOs
-export interface CreateGroupDto {
+
+export interface CreateGroupRequest {
   name: string;
   description?: string;
-  currency: string;
+  currency?: string;
 }
 
-export interface UpdateGroupDto {
+export interface UpdateGroupRequest {
   name?: string;
   description?: string;
   currency?: string;
 }
 
-export interface JoinGroupDto {
-  inviteCode: string;
+export interface InviteMemberRequest {
+  email?: string;
+  inviteCode?: string;
 }
 
-// Expense DTOs
-export interface CreateExpenseDto {
-  groupId: string;
-  amount: number;
-  description: string;
-  category?: string;
-  paidById: string;
-  participantIds: string[];
-  splitType: 'EQUAL' | 'PERCENTAGE' | 'CUSTOM';
-  customSplits?: CustomSplit[];
-  expenseDate?: string;
-}
-
-export interface CustomSplit {
-  userId: string;
-  amount?: number;
-  percentage?: number;
-}
-
-export interface UpdateExpenseDto {
-  amount?: number;
-  description?: string;
-  category?: string;
-  expenseDate?: string;
-}
-
-// Settlement DTOs
-export interface CreateSettlementDto {
-  groupId: string;
-  toUserId: string;
-  amount: number;
-  paymentMethod?: string;
-  note?: string;
+export interface GroupListResponse {
+  groups: Group[];
+  totalCount: number;
+  pageSize: number;
+  currentPage: number;
 }
