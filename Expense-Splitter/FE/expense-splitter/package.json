@@ -6,10 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-     "lint": "eslint .",                            
-    "lint:fix": "eslint . --fix",                   
-    "lint:strict": "eslint . --max-warnings 0",     
-    "lint:ci": "eslint . --quiet",                  
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:strict": "eslint . --max-warnings 0",
+    "lint:ci": "eslint . --quiet",
     "lint:specific": "eslint 'src/**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
@@ -33,6 +33,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "cookies-next": "^6.1.0",
     "date-fns": "^4.1.0",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.542.0",
