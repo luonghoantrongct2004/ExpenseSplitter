@@ -63,7 +63,7 @@ public class GroupsController : ControllerBase
     /// <summary>
     /// Lấy danh sách nhóm của user
     /// </summary>
-    [HttpGet]
+    [HttpGet("mygroups")]
     [ProducesResponseType(typeof(ApiResponse<PagedList<GroupListDto>>), 200)]
     public async Task<IActionResult> GetUserGroups([FromQuery] PaginationParams paginationParams)
     {

@@ -1,6 +1,19 @@
-import { Group } from "./model";
-
-// types/api.types.ts
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T | null;
+  errors: string[];
+  timestamp: string;
+}
+export interface PagedList<T> {
+  items: T[];
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+  totalCount: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
+}
 export interface User {
   id: string;
   name: string;
@@ -25,21 +38,6 @@ export interface ExpenseResponse {
   createdAt: string;
 }
 
-export interface GroupResponse {
-  id: string;
-  name: string;
-  members: User[];
-  totalExpenses: number;
-  createdAt: string;
-}
-
-export interface PaginatedResponse<T> {
-  items: T[];
-  total: number;
-  page: number;
-  pageSize: number;
-}
-
 export interface ApiErrorResponse {
   message: string;
   hint?: string;
@@ -54,30 +52,4 @@ export interface GoogleLoginDto {
 
 export interface RefreshTokenDto {
   refreshToken: string;
-}
-
-// Group DTOs
-
-export interface CreateGroupRequest {
-  name: string;
-  description?: string;
-  currency?: string;
-}
-
-export interface UpdateGroupRequest {
-  name?: string;
-  description?: string;
-  currency?: string;
-}
-
-export interface InviteMemberRequest {
-  email?: string;
-  inviteCode?: string;
-}
-
-export interface GroupListResponse {
-  groups: Group[];
-  totalCount: number;
-  pageSize: number;
-  currentPage: number;
 }

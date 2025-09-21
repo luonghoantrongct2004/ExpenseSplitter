@@ -21,14 +21,14 @@ export function useGoogleLogin() {
         
         await login(tokenResponse.access_token);
         
-        toast.success("Đăng nhập thành công! Welcome to the club 🎉");
+        toast.success("Welcome back! Cà phê sữa đá không? ☕");
         router.push("/");
       } catch (error) {
-        toast.error("Đăng nhập thất bại");
+        toast.error("Hmm, có vẻ không được rồi. Thử lại nhé! 🔄");
       }
     },
     onError: () => {
-      toast.error("Đăng nhập Google thất bại");
+      toast.error("Hmm, có vẻ không được rồi. Thử lại nhé! 🔄");
     },
   });
 

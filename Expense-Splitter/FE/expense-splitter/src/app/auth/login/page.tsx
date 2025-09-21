@@ -21,13 +21,13 @@ export default function LoginPage() {
       }
       
       await login(credentialResponse.credential);
-      toast.success("Đăng nhập thành công! Welcome to the club 🎉");
+      toast.success("Đăng nhập thành công! Cà phê sữa đá không? ☕");
       router.push("/");
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(error.message || "Đăng nhập thất bại");
+        toast.error(error.message || "Hmm, có vẻ không được rồi. Thử lại nhé! 🔄");
       } else {
-        toast.error("Đăng nhập thất bại");
+        toast.error("Hmm, có vẻ không được rồi. Thử lại nhé! 🔄");
       }
     }
   };

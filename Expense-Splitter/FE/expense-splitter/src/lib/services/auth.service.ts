@@ -16,6 +16,7 @@ interface AuthResponse {
 }
 
 class AuthService {
+  //NOTE - Service login google
   async googleLogin(googleToken: string): Promise<AuthResponse> {
     try {
       const response = await axios.post(
@@ -25,12 +26,12 @@ class AuthService {
           deviceInfo: navigator.userAgent,
         },
         {
-          withCredentials: true, // Để gửi và nhận cookies
+          withCredentials: true,
         }
       );
 
-      // Lưu access token
       this.setAccessToken(response.data.accessToken);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
       
       return response.data;
     } catch (error: unknown) {
@@ -40,14 +41,14 @@ class AuthService {
       throw new Error('Login failed');
     }
   }
-
+  //NOTE - Service refresh token
   async refreshToken(): Promise<string> {
     try {
       const response = await axios.post(
         `${API_URL}/api/auth/refresh`,
         {},
         {
-          withCredentials: true, // Gửi refresh token từ cookie
+          withCredentials: true,
         }
       );
 
@@ -59,6 +60,15 @@ class AuthService {
       this.logout();
       throw error;
     }
+  }
+
+  setAccessToken(token: string) {
+    Cookies.set('accessToken', token, { 
+      expires: 7,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/'
+    });
   }
 
   async getCurrentUser() {
@@ -74,7 +84,7 @@ class AuthService {
       throw error;
     }
   }
-
+  //NOTE - Service logout
   async logout() {
     try {
       await axios.post(
@@ -96,7 +106,7 @@ class AuthService {
       this.clearTokens();
     }
   }
-
+  //NOTE - Service logout all device
   async logoutAllDevices() {
     try {
       await axios.post(
@@ -116,22 +126,20 @@ class AuthService {
     }
   }
 
-  // Token management
-  setAccessToken(token: string) {
-    Cookies.set('accessToken', token, { 
-      secure: true,
-      sameSite: 'strict'
-    });
-  }
-
   getAccessToken(): string | undefined {
     return Cookies.get('accessToken');
   }
-
-  clearTokens() {
-    Cookies.remove('accessToken');
+  //NOTE - Service get info user
+  getUser() {
+    const userStr = localStorage.getItem('user');
+    return userStr ? JSON.parse(userStr) : null;
   }
 
+  clearTokens() {
+    Cookies.remove('accessToken', { path: '/' });
+    localStorage.removeItem('user');
+  }
+  // NOTE - Service Is Authenticated
   isAuthenticated(): boolean {
     return !!this.getAccessToken();
   }

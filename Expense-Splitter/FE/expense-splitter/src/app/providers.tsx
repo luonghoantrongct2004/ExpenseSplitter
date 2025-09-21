@@ -1,18 +1,36 @@
-"use client"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import React, { useState } from 'react';
-import { Toaster } from 'react-hot-toast';
+"use client";
 
-export function Providers({children}: {children: React.ReactNode}){
-    const[queryClient] = useState(()=> new QueryClient());
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ThemeProvider } from "next-themes";
+import { useState } from "react";
+import { AuthInitializer } from "../components/auth/AuthInitializer";
 
-    return (
-        <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
-            <QueryClientProvider client={queryClient}>
-                {children}
-                <Toaster position="top-right" />
-            </QueryClientProvider>
-        </GoogleOAuthProvider>
-    )
+export function Providers({ children }: { children: React.ReactNode }) {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000,
+            retry: 1,
+            refetchOnWindowFocus: false,
+          },
+        },
+      })
+  );
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <AuthInitializer>{children}</AuthInitializer>
+      </ThemeProvider>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
+  );
 }
