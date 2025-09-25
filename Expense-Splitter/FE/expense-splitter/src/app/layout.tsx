@@ -1,3 +1,4 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -42,19 +43,23 @@ export default function RootLayout({
     <html lang="vi" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen bg-background font-sans antialiased overflow-hidden",
           inter.variable
         )}
       >
         <Providers>
           <NavigationLoading />
-          <div className="relative flex min-h-screen flex-col">
+          <div className="relative flex flex-col h-screen">
             <Header />
             <Navbar />
-            <main className="flex-1">
-              <div className="container mx-auto px-4 py-6 md:px-6 lg:px-8">
-                <BackgroundGlow>{children}</BackgroundGlow>
-              </div>
+            <main className="flex-1 overflow-hidden">
+              <BackgroundGlow>
+                <div className="h-full overflow-auto">
+                  <div className="container mx-auto px-4 py-6 md:px-6 lg:px-8">
+                    {children}
+                  </div>
+                </div>
+              </BackgroundGlow>
             </main>
             <MobileNav />
           </div>
