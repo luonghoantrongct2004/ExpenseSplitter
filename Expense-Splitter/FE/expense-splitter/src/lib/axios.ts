@@ -33,7 +33,7 @@ instance.interceptors.response.use(
     if (error.response?.status === 401) {
       Cookies.remove("accessToken");
       Cookies.remove("refreshToken");
-      window.location.href = "/login";
+      window.location.href = "/auth/login";
     } else {
       const errorMessage =
         error.response?.data?.message ||

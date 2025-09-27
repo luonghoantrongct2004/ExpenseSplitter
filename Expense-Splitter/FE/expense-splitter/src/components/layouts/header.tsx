@@ -42,11 +42,11 @@ export function Header() {
       await authApi.logout();
       logout();
       toast.success("Đã đăng xuất!");
-      router.push("/login");
+      router.push("/auth/login");
     } catch (error) {
       console.error("Logout error:", error);
       logout();
-      router.push("/login");
+      router.push("/auth/login");
     }
   };
 
@@ -56,7 +56,7 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link
-            href={isAuthenticated ? "/" : "/login"}
+            href={isAuthenticated ? "/" : "/auth/login"}
             className="flex items-center gap-3 hover:opacity-80 transition-opacity"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
