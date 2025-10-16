@@ -27,17 +27,6 @@ export interface AuthResponse {
   expiresAt: string;
   message: string;
 }
-
-export interface ExpenseResponse {
-  id: string;
-  title: string;
-  amount: number;
-  groupId: string;
-  createdBy: User;
-  participants: User[];
-  createdAt: string;
-}
-
 export interface ApiErrorResponse {
   message: string;
   hint?: string;

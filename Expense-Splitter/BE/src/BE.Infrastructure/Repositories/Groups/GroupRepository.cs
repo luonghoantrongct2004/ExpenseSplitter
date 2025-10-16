@@ -1,8 +1,6 @@
 ﻿using BE.Common;
-using BE.Domain;
 using BE.Domain.Entities;
 using BE.Domain.Specifications;
-using BE.Infrastructure.Data.Repositories;
 using BE.Infrastructure.Interfaces.Groups;
 using Microsoft.EntityFrameworkCore;
 

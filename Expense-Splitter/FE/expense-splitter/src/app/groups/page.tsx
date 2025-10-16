@@ -1,4 +1,3 @@
-// app/groups/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -20,6 +19,7 @@ import {
 import { useMyGroups, useLeaveGroup } from "@/src/hooks/useGroups";
 import { CreateGroupModal } from "@/src/components/groups/CreateGroupModal";
 import { JoinGroupModal } from "@/src/components/groups/JoinGroupModal";
+import { CreateExpenseModal } from "@/src/components/groups/CreateExpenseModal";
 import { Loading } from "@/components/ui/Loading";
 import { GroupListDto } from "@/src/entities/group/group.dto";
 import { formatCurrency, formatDate } from "@/src/lib/utils";
@@ -39,6 +39,7 @@ export default function GroupsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
+  const [showExpenseModal, setShowExpenseModal] = useState(false);
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [page, setPage] = useState(1);
@@ -203,7 +204,12 @@ export default function GroupsPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <Button size="icon" variant="ghost">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => setShowExpenseModal(true)}
+                    title="Tạo chi tiêu mới"
+                  >
                     <Receipt className="h-5 w-5" />
                   </Button>
                   <DropdownMenu>
@@ -371,6 +377,13 @@ export default function GroupsPage() {
         isOpen={showJoinModal}
         onClose={() => setShowJoinModal(false)}
       />
+      {selectedGroup && (
+        <CreateExpenseModal
+          isOpen={showExpenseModal}
+          onClose={() => setShowExpenseModal(false)}
+          groupId={selectedGroup.id}
+        />
+      )}
     </div>
   );
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Attachment = BE.Domain.Entities.Attachment;
 
-namespace BE.Domain
+namespace BE.Infrastructure
 {
     public class AppDbContext : DbContext
     {

@@ -67,4 +67,11 @@ public static class CommonData
     {
         public const string VND = "VND";
     }
+
+    public enum SplitType
+    {
+        Equal,
+        Percentage,
+        Amount
+    }
 }

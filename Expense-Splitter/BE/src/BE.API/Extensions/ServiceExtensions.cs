@@ -1,10 +1,11 @@
-﻿// BE.API/Extensions/ServiceExtensions.cs
-using BE.Domain.Entities;
+﻿using BE.Domain.Entities;
 using BE.Domain.Interfaces;
-using BE.Infrastructure.Data.Repositories;
 using BE.Infrastructure.Interfaces;
+using BE.Infrastructure.Interfaces.Expenses;
 using BE.Infrastructure.Interfaces.Groups;
 using BE.Infrastructure.Mappings;
+using BE.Infrastructure.Repositories;
+using BE.Infrastructure.Repositories.Expenses;
 using BE.Infrastructure.Repositories.Groups;
 using BE.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -77,10 +78,12 @@ public static class ServiceExtensions
         // Group Management
         services.AddScoped<IGroupRepository, GroupRepository>();
         services.AddScoped<IGroupMemberRepository, GroupMemberRepository>();
+        // Expenses Management
+        services.AddScoped<IExpenseRepository, ExpenseRepository>();
         // User Management
         services.AddScoped<IRepository<User>, Repository<User>>();
         // Expense Management
-        services.AddScoped<IRepository<Expense>, Repository<Expense>>();
+        services.AddScoped<IExpenseRepository, ExpenseRepository>();
         // Notification System
         services.AddScoped<IRepository<Notification>, Repository<Notification>>();
         // Activity Logging
@@ -103,8 +106,10 @@ public static class ServiceExtensions
 
         // === CORE BUSINESS SERVICES ===
 
-        // Group Management - Đã implement
+        // Group Management
         services.AddScoped<IGroupService, GroupService>();
+        // Expense Management
+        services.AddScoped<IExpenseService, ExpenseService>();
 
         // TODO: User Management
         // services.AddScoped<IUserService, UserService>();
@@ -134,6 +139,7 @@ public static class ServiceExtensions
         // 2. AutoMapper - cần cho mapping DTOs
         services.AddAutoMapper(typeof(GroupMappingProfile).Assembly);
         services.AddAutoMapper(typeof(UserMappingProfile).Assembly);
+        services.AddAutoMapper(typeof(ExpenseMappingProfile).Assembly);
 
         // 3. Authentication & Authorization
         services.AddAuthenticationConfiguration(configuration);

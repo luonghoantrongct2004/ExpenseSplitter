@@ -105,8 +105,7 @@ public class GroupsController : ControllerBase
 
                 return BadRequest(ApiResponse<object>.Fail(result.Error));
             }
-
-            return Ok(ApiResponse<GroupDetailDto>.Ok(result.Data!, result.Message));
+            return Ok(ApiResponse<GroupDetailDto>.Ok(result.Data, result.Message));
         }
         catch (Exception ex)
         {

@@ -1,4 +1,4 @@
-﻿using BE.Domain;
+﻿using BE.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace BE.API.Extensions;

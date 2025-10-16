@@ -1,5 +1,6 @@
 ﻿using BE.API.Extensions;
 using BE.API.Middleware;
+using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,11 +20,32 @@ if (app.Environment.IsDevelopment())
     /// link: SwaggerExtensions.cs#UseSwaggerDocumentation
     /// </summary>
     app.UseSwaggerDocumentation();
+    app.UseDeveloperExceptionPage();
 }
 if (app.Environment.IsProduction())
 {
     app.UseMiddleware<SwaggerAuthMiddleware>();
 }
+app.UseExceptionHandler(appError =>
+{
+    appError.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+
+        var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+        if (contextFeature != null)
+        {
+            await context.Response.WriteAsync(new
+            {
+                StatusCode = context.Response.StatusCode,
+                Message = "Internal Server Error",
+                Detailed = app.Environment.IsDevelopment() ? contextFeature.Error.ToString() : null
+            }.ToString());
+        }
+    });
+});
+
 app.UseHttpsRedirection();
 /// <summary>
 /// CORS configuration

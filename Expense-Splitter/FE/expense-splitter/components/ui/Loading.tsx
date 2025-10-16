@@ -9,7 +9,6 @@ interface LoadingProps {
 
 export function Loading({
   size = "sm",
-  className,
   fullScreen = false,
   showHamster = true,
 }: LoadingProps) {
@@ -21,7 +20,7 @@ export function Loading({
     <div
       aria-label="Orange and tan hamster running in a metal wheel"
       role="img"
-      className={cn("wheel-and-hamster sm", className)}
+      className={cn("wheel-and-hamster sm")}
     >
       <div className="wheel"></div>
       <div className="hamster">
@@ -41,7 +40,7 @@ export function Loading({
       <div className="spoke"></div>
     </div>
   ) : (
-    <div className={cn("loader", sizes[size], className)} data-text="Loading" />
+    <div className={cn("loader", sizes[size])} data-text="Đang tải" />
   );
 
   if (fullScreen) {

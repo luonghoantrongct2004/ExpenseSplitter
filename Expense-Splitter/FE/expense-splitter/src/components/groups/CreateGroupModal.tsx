@@ -114,7 +114,7 @@ export function CreateGroupModal({ isOpen, onClose }: CreateGroupModalProps) {
             >
               {createGroup.isPending ? (
                 <>
-                  <Loading size="sm" color="#ffffff" />
+                  <Loading />
                   <span>Đang tạo...</span>
                 </>
               ) : (

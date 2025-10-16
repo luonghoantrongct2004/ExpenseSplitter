@@ -1,10 +1,8 @@
-// components/layouts/navbar.tsx
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -79,13 +77,6 @@ export function Navbar() {
               })}
             </NavigationMenuList>
           </NavigationMenu>
-
-          <Button asChild>
-            <Link href="/expenses/new">
-              <Plus className="mr-2 h-4 w-4" />
-              Thêm chi tiêu
-            </Link>
-          </Button>
         </div>
       </div>
     </nav>

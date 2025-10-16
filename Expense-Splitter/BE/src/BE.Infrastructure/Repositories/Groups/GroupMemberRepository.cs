@@ -1,7 +1,5 @@
-﻿using BE.Domain;
-using BE.Domain.Entities;
+﻿using BE.Domain.Entities;
 using BE.Domain.Specifications;
-using BE.Infrastructure.Data.Repositories;
 using BE.Infrastructure.Interfaces.Groups;
 
 namespace BE.Infrastructure.Repositories.Groups;

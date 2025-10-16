@@ -37,9 +37,10 @@ export interface GroupMemberDto {
   id: string;
   userId: string;
   groupId: string;
-  role: 'Admin' | 'Member';
+  role: "Admin" | "Member";
   joinedAt: string;
   user: User;
+  avatarUrl: string;
   balance: number;
 }
 

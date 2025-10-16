@@ -1,11 +1,10 @@
-﻿using BE.Domain;
-using BE.Domain.Entities;
+﻿using BE.Domain.Entities;
 using BE.Domain.Interfaces;
 using BE.Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace BE.Infrastructure.Data.Repositories
+namespace BE.Infrastructure.Repositories
 {
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {

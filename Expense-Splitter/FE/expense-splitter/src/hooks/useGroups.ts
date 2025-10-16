@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { groupService } from "@/src/lib/services/groupService";
@@ -66,5 +67,27 @@ export const useJoinGroup = () => {
       toast.success("Tham gia nhóm thành công!");
       router.push(`/api/groups/${joinedGroup.id}`);
     },
+  });
+};
+
+// Get group members
+export const useGroupMembers = (groupId: string) => {
+  return useQuery({
+    queryKey: ["groups", groupId, "members"],
+    queryFn: async () => {
+      const group = await groupService.getGroup(groupId);
+      if (!group?.members) return [];
+      return group.members.map((member: any) => ({
+        id: member.userId,
+        name: member.userName,
+        email: member.email,
+        avatar: member.avatarUrl,
+        balance: member.balance,
+        role: member.role,
+        isActive: member.isActive,
+        joinedAt: member.joinedAt,
+      }));
+    },
+    enabled: !!groupId,
   });
 };

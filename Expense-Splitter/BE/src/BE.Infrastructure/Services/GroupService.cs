@@ -60,6 +60,7 @@ public class GroupService : IGroupService
                 GroupId = group.Id,
                 UserId = userId,
                 Role = CommonData.GroupRole.Admin,
+                AvatarURL = user.AvatarUrl,
                 JoinedAt = DateTime.UtcNow,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -569,7 +570,7 @@ public class GroupService : IGroupService
         foreach (var member in activeMembers)
         {
             var balance = await CalculateUserBalanceAsync(group.Id, member.UserId);
-            statistics.MemberBalances[member.UserId] = new UserBalanceDto
+            statistics.MemberBalances[member.UserId] = new UserGroupBalanceDto
             {
                 UserId = member.UserId,
                 UserName = member.User?.Name ?? "",
