@@ -60,7 +60,6 @@ public class GroupService : IGroupService
                 GroupId = group.Id,
                 UserId = userId,
                 Role = CommonData.GroupRole.Admin,
-                AvatarURL = user.AvatarUrl,
                 JoinedAt = DateTime.UtcNow,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow

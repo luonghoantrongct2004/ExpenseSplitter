@@ -309,8 +309,22 @@ export function CreateExpenseModal({
                 }`}
                 disabled={createExpense.isPending}
               >
-                <Users className="w-4 h-4 mx-auto mb-1" />
-                <span className="text-sm">Chia đều</span>
+                <Users
+                  className={`w-4 h-4 mx-auto mb-1 ${
+                    formData.splitType === SplitType.Equal
+                      ? "text-primary-foreground"
+                      : "text-foreground"
+                  }`}
+                />
+                <span
+                  className={`text-sm ${
+                    formData.splitType === SplitType.Equal
+                      ? "text-primary-foreground"
+                      : "text-foreground"
+                  }`}
+                >
+                  Chia đều
+                </span>
               </button>
               <button
                 type="button"
@@ -324,8 +338,22 @@ export function CreateExpenseModal({
                 }`}
                 disabled={createExpense.isPending}
               >
-                <DollarSign className="w-4 h-4 mx-auto mb-1" />
-                <span className="text-sm">Tùy chỉnh</span>
+                <DollarSign
+                  className={`w-4 h-4 mx-auto mb-1 ${
+                    formData.splitType === SplitType.Amount
+                      ? "text-primary-foreground"
+                      : "text-foreground"
+                  }`}
+                />
+                <span
+                  className={`text-sm ${
+                    formData.splitType === SplitType.Amount
+                      ? "text-primary-foreground"
+                      : "text-foreground"
+                  }`}
+                >
+                  Tùy chỉnh
+                </span>
               </button>
               <button
                 type="button"
@@ -339,8 +367,24 @@ export function CreateExpenseModal({
                 }`}
                 disabled={createExpense.isPending}
               >
-                <span className="text-lg mx-auto mb-1">%</span>
-                <span className="text-sm">Phần trăm</span>
+                <span
+                  className={`text-lg mx-auto mb-1 ${
+                    formData.splitType === SplitType.Percentage
+                      ? "text-primary-foreground"
+                      : "text-foreground"
+                  }`}
+                >
+                  %
+                </span>
+                <span
+                  className={`text-sm ${
+                    formData.splitType === SplitType.Percentage
+                      ? "text-primary-foreground"
+                      : "text-foreground"
+                  }`}
+                >
+                  Phần trăm
+                </span>
               </button>
             </div>
           </div>

@@ -41,7 +41,7 @@ namespace BE.Infrastructure.Mappings
                     opt => opt.MapFrom(src => src.User != null ? src.User.Name : ""))
                 .ForMember(dest => dest.UserEmail,
                     opt => opt.MapFrom(src => src.User != null ? src.User.Email : ""))
-                .ForMember(dest => dest.UserAvatar,
+                .ForMember(dest => dest.AvatarURL,
                     opt => opt.MapFrom(src => src.User != null ? src.User.AvatarUrl : null))
                 // Balance sẽ được set trong service
                 .ForMember(dest => dest.Balance, opt => opt.Ignore());
