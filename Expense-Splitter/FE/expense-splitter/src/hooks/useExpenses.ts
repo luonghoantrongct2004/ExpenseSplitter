@@ -44,7 +44,14 @@ export function useCreateExpense(groupId: string) {
     },
     onError: (error: any) => {
       console.error("Error creating expense:", error);
-      toast.error(error.response?.data?.message || "Không thể tạo chi tiêu");
+      console.error("Error response:", error.response?.data);
+
+      // Display the specific error message from the server if available
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.errors?.[0]?.message ||
+        "Không thể tạo chi tiêu";
+      toast.error(errorMessage);
     },
   });
 }

@@ -36,7 +36,6 @@ public class ExpensesController : ControllerBase
     /// </summary>
     [HttpPost("groups/{groupId}")]
     [ProducesResponseType(typeof(ApiResponse<ExpenseDto>), 201)]
-    [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> CreateExpense(Guid groupId, [FromBody] CreateExpenseDto dto)
     {
         try

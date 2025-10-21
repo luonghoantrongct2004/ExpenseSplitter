@@ -27,10 +27,10 @@ export function CreateExpenseModal({
   groupId,
 }: CreateExpenseModalProps) {
   const [formData, setFormData] = useState({
-    description: "",
     amount: "",
-    expenseDate: new Date().toISOString().split("T")[0],
+    description: "",
     note: "",
+    expenseDate: new Date().toISOString().split("T")[0],
     category: ExpenseCategory.Other,
     paidById: "",
     splitType: SplitType.Equal,
@@ -108,20 +108,53 @@ export function CreateExpenseModal({
         toast.error("Tổng chia không bằng tổng chi tiêu");
         return;
       }
+    } else if (formData.splitType === SplitType.Percentage) {
+      // For percentage splits, use the customSplits object as percentages
+      splits = formData.selectedMembers.map((userId) => {
+        const percentage = formData.customSplits[userId] || 0;
+        return {
+          userId,
+          amount: (totalAmount * percentage) / 100,
+        };
+      });
+
+      // Validate that total percentages equal 100%
+      const totalPercentage = Object.values(formData.customSplits).reduce(
+        (sum, percentage) => sum + percentage,
+        0
+      );
+      if (Math.abs(100 - totalPercentage) > 0.01) {
+        toast.error("Tổng phần trăm phải bằng 100%");
+        return;
+      }
     }
 
+    // Format the date properly
+    const expenseDate = new Date(formData.expenseDate);
+    // Ensure the date is valid
+    if (isNaN(expenseDate.getTime())) {
+      toast.error("Ngày chi tiêu không hợp lệ");
+      return;
+    }
+
+    // Create the expense data object
     const expenseData: CreateExpenseDto = {
       amount: totalAmount,
       description: formData.description,
       note: formData.note,
-      category: formData.category,
+      category: formData.category, // This is now a numeric value
       paidById: formData.paidById,
-      expenseDate: formData.expenseDate,
+      expenseDate: expenseDate.toISOString(),
       splits,
     };
 
+    // Wrap the data in a 'dto' field as expected by the backend
+    const requestData = {
+      dto: expenseData,
+    };
+
     try {
-      await createExpense.mutateAsync(expenseData);
+      await createExpense.mutateAsync(requestData.dto);
 
       // Reset form
       setFormData({
@@ -129,7 +162,7 @@ export function CreateExpenseModal({
         amount: "",
         expenseDate: new Date().toISOString().split("T")[0],
         note: "",
-        category: ExpenseCategory.Other,
+        category: ExpenseCategory.Other, // This is now 5
         paidById: currentUser?.id || "",
         splitType: SplitType.Equal,
         selectedMembers: members?.map((m: any) => m.id) || [],
@@ -252,7 +285,7 @@ export function CreateExpenseModal({
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    category: e.target.value as ExpenseCategory,
+                    category: parseInt(e.target.value) as ExpenseCategory,
                   })
                 }
                 className="w-full px-4 py-2 border border-border bg-background text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -436,6 +469,7 @@ export function CreateExpenseModal({
                       </Avatar>
                       <span className="text-sm">{member.name}</span>
                     </label>
+                    {/* In the member selection section, update the conditional rendering */}
                     {formData.splitType === SplitType.Amount &&
                       formData.selectedMembers.includes(member.id) && (
                         <input
@@ -454,6 +488,28 @@ export function CreateExpenseModal({
                           className="w-24 px-2 py-1 text-sm border border-border rounded"
                           disabled={createExpense.isPending}
                         />
+                      )}
+                    {formData.splitType === SplitType.Percentage &&
+                      formData.selectedMembers.includes(member.id) && (
+                        <div className="flex items-center">
+                          <input
+                            type="number"
+                            value={formData.customSplits[member.id] || ""}
+                            onChange={(e) => {
+                              setFormData((prev) => ({
+                                ...prev,
+                                customSplits: {
+                                  ...prev.customSplits,
+                                  [member.id]: parseFloat(e.target.value) || 0,
+                                },
+                              }));
+                            }}
+                            placeholder="0"
+                            className="w-20 px-2 py-1 text-sm border border-border rounded"
+                            disabled={createExpense.isPending}
+                          />
+                          <span className="ml-1 text-sm">%</span>
+                        </div>
                       )}
                   </div>
                 ))

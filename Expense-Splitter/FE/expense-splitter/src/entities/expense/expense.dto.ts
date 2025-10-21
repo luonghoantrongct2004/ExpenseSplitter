@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export enum ExpenseCategory {
-  Food = "Food",
-  Transport = "Transport",
-  Accommodation = "Accommodation",
-  Entertainment = "Entertainment",
-  Shopping = "Shopping",
-  Other = "Other",
+  Food = 0,
+  Transport = 1,
+  Accommodation = 2,
+  Entertainment = 3,
+  Shopping = 4,
+  Other = 5,
 }
 
 export enum SplitType {
